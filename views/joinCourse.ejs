@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ./common/header.ejs %>
+    <style>
+        .container {
+            padding: 50px 0 0 0;
+        }
+        .mb20{
+            margin-bottom:20px;
+        }
+    </style>
+</head>
+
+<body class="bg-dark">
+    <div class="container">
+        <div class="text-white">
+            <div class="col-md-6 d-flex justify-content-left align-items-center mb20">
+                <span style="display:inline-block;width:200px">课程开始时间：</span> <input type="text"
+                    class="form-control bg-dark text-white" id="startTime">
+            </div>
+            <div class="col-md-6 d-flex justify-content-left align-items-center">
+                <span style="display:inline-block;width:200px">课程结束时间：</span> <input type="text"
+                    class="form-control bg-dark text-white" id="endTime">
+            </div>
+        </div>
+        <div class="text-left" style="margin-top:20px;">
+            <button id="join" class="btn btn-md btn-primary" style="margin-left:20px">现在参加</button>
+        </div>
+
+    </div>
+
+    <script>
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#startTime'
+            });
+            laydate.render({
+                elem: '#endTime'
+            });
+        });
+        $(function(){
+            $("#join").click(function(){
+                var startTime = $("#startTime").val();
+                var endTime = $("#startTime").val();
+                console.log(startTime)
+                console.log(endTime)
+                if(!startTime || !endTime || startTime == "" || endTime == ""){
+                    layer.msg("请选择预约课程的时间")
+                    return;
+                }
+                $.post("/courses/joinCourse",{
+                    startTime,
+                    endTime,
+                    courseId:"<%= courseId %>",
+                    userId:"<%= userId %>"
+                }).done(data=>{
+                    console.log(data)
+                    if(data.code != 200){
+                        layer.msg(data.message);
+                        return;
+                    }
+                    layer.msg("参加课程成功")
+                }).fail(err=>{
+                    throw err;
+                })
+            })
+        })
+    </script>
+</body>
+
+</html>

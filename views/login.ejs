@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ./common/header.ejs %>
+</head>
+
+<body>
+    <div class="box">
+        <div class="links">
+            没有账号？立即
+            <a href="/users/toregister">注册</a> |
+            <a href="/">首页</a>
+        </div>
+        <form class="form-signin text-center">
+            <h1 class="h3 mb-3 font-weight-normal">Please Login</h1>
+            <label for="account" class="sr-only">User Account</label>
+            <input type="text" id="account" class="form-control" placeholder="Place Enter Your Account" required autofocus>
+            <label for="password" class="sr-only">User Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Place Enter Your Password" required>
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me" id="remember" checked> Remember Me
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" id="btnSubmit">Sign in</button>
+        </form>
+    </div>
+    <script>
+        var rememberAccount = $.cookie("remember");
+        if (rememberAccount) {
+            $("#account").val(rememberAccount);
+        }
+        var accountPattern = /^1[34578]\d{9}$/;
+        var passwordPattern = /^(\w){6,18}$/
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            var account = $("#account").val();
+            var password = $("#password").val();
+            var remember = $("#remember").prop("checked");
+            if (!account || !password) {
+                layer.msg("请填写完整后提交");
+                return;
+            }
+            if (!accountPattern.test(account)) {
+                layer.msg("您输入的手机号有误，请重新输入");
+                return;
+            }
+            if (!passwordPattern.test(password)) {
+                layer.msg("密码格式错误！（请输入6-18位字母、数字、下划线组成的字符串）");
+                return;
+            }
+            $.post("/users/login", {
+                account: account,
+                password: password,
+                remember: remember
+            }).done(function (data) {
+                console.log(data);
+                if (data.code != 200) {
+                    layer.msg(data.message);
+                    return;
+                }
+                layer.msg("登录成功");
+                var account = data.user.account;
+                var user = JSON.stringify(data.user);
+                $.cookie("user", user, { expires: 1, path: "/" });
+                $.cookie("account", account, { expires: 1, path: "/" });
+                $.cookie("remember", account, { expires: 7, path: "/" })
+                location.href = "/"
+            }).fail(function (err) {
+                throw err;
+            })
+        })
+    </script>
+</body>
+
+</html>

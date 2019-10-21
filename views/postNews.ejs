@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ./common/header.ejs %>
+        <link rel="stylesheet" href="/stylesheets/newsDetail.css">
+</head>
+
+<body>
+    <% include ./common/nav2.ejs %>
+        <div class="bg-light col3">
+            <div class="row mb-2">
+                <div class="col-md-8" style="margin:0 auto;">
+                    <h2 class="mb-3 text-center mt20 mb20">发布新闻通知</h2>
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="newsTitle">新闻标题</label>
+                                <input type="text" class="form-control" id="newsTitle" name="newsTitle" placeholder="" value="" required>
+                                <div class="invalid-feedback">
+                                    标题为字母、数字、下划线组成的最多30个字的字符串
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="page-logo">封面图片</label>
+                                <div id="uploader-demo" class="d-flex">
+                                    <!--用来存放item-->
+                                    <div id="filePicker" style="border:none;">
+                                        <img id="uploadImg" src="/images/upload.jpg" alt="" width="100px" height="100px">
+                                    </div>
+                                    <div id="fileList" class="uploader-list"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="substract">摘要</label>
+                                    <textarea class="form-control" name="substract" id="substract" rows="3" maxlength="200"></textarea>
+                                </div>
+                                <div class="invalid-feedback">
+                                    请输入最多200字的摘要信息
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3 mycontent">
+                                <label for="content">正文</label>
+                                <div id="editor"></div>
+                                <script type="text/javascript">
+                                    var E = window.wangEditor
+                                    var editor = new E('#editor')
+                                    // 或者 var editor = new E( document.getElementById('editor') )
+                                    editor.customConfig.uploadImgShowBase64 = true
+                                    editor.create()
+                                </script>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" id="btnSubmit">提交-新闻通知</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var imgPath = "";
+            var uploader = WebUploader.create({
+                // 选完文件后，是否自动上传。
+                auto: true,
+                // swf文件路径
+                swf: 'http://localhost:3000/libs/webuploader/Uploader.swf',
+                // 文件接收服务端。
+                server: 'http://localhost:3000/news/uploadImg',
+                // 选择文件的按钮。可选。
+                // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                pick: '#filePicker',
+                // 只允许选择图片文件。
+                accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    mimeTypes: 'image/*'
+                }
+            });
+
+            editor.customConfig.uploadImgShowBase64 = true
+
+            uploader.on('fileQueued', function (file) {
+                var $li = $(
+                    '<div id="' + file.id + '" class="file-item thumbnail">' +
+                    '<img>' +
+                    '</div>'
+                ),
+                    $img = $li.find('img');
+
+
+                // $list为容器jQuery实例
+                $("#fileList").html("");
+                $("#fileList").append($li);
+
+                // 创建缩略图
+                // 如果为非图片文件，可以不用调用此方法。
+                // thumbnailWidth x thumbnailHeight 为 100 x 100
+                uploader.makeThumb(file, function (error, src) {
+                    if (error) {
+                        $img.replaceWith('<span>不能预览</span>');
+                        return;
+                    }
+                    $img.attr('src', src);
+                }, 100, 100);
+
+            });
+            uploader.on('uploadSuccess', function (file, response) {
+                $('#' + file.id).addClass('upload-state-done');
+                imgPath = response.imgPath;
+            });
+            $(function () {
+                $("#btnSubmit").click(function (e) {
+                    console.log(imgPath)
+                    e.preventDefault();
+                    var title = $("#newsTitle").val();
+                    var substract = $("#substract").val();
+                    var content = editor.txt.html();
+                    if (!title || !substract || !content) {
+                        layer.msg("请将内容填写完整后在提交");
+                        return;
+                    }
+                    $.post("/news/postNews", {
+                        userId: user.id,
+                        title,
+                        substract,
+                        content,
+                        imgPath
+                    }).done(data => {
+                        console.log(data);
+                        if (data.code != 200) {
+                            layer.msg(data.message);
+                            return;
+                        }
+                        layer.msg(data.message);
+                        $("#fileList").html("");
+                        $("#newsTitle").val("");
+                        $("#substract").val("");
+                        editor.txt.clear();
+                    }).fail(err => {
+                        throw err;
+                    })
+                })
+            })
+
+        </script>
+</body>
+
+</html>

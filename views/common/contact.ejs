@@ -1,0 +1,20 @@
+<button id="customerService" class="btn btn-primary btn-sm">在线交流</button>
+<script>
+    $("#customerService").click(function () {
+        if (!$.cookie("user")) {
+            location.href = "/users/tologin";
+            return;
+        }
+        var type = JSON.parse($.cookie("user")).type;
+        var targetType = 0;
+        if (type == 0) {
+            targetType = 1;
+        }
+        layer.open({
+            type: 2,
+            content: 'http://localhost:3000/tocustomerservice/' + targetType, //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+            area: ["800px", "600px"],
+            title: "在线客服"
+        });
+    })
+</script>

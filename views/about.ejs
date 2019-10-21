@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ./common/header.ejs %>
+</head>
+
+<body>
+    <div class="box">
+        <% include ./common/nav.ejs %>
+            <main>
+                <div class="slider">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="sliderimg" src="/images/about_b1.jpg" alt="" width="100%">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img class="sliderimg" src="/images/about_b2.jpg" alt="" width="100%">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="aboutus-bg">
+                    <div class="aboutus">
+                        <div class="title">
+                            <h2>关于我们</h2>
+                        </div>
+                        <div class="info">
+                            <div class="company-info">
+                                <p>向上健身俱乐部，创建于2019年，立足河南理工大学，辐射全中国地区。专注健身14年，已发展成为中国大型直营健身连锁领跑者。截至2018年7月，向上健身已拥有400+家签约及开业的直营门店</p>
+                                <p>提供健身最好服务</p>
+                                <p>致力于成为客户最好的健身伙伴，携手国内外顶尖合作伙伴，开始新的品牌战略历程。目前已与不知名公司结成战略联盟。</p>
+                                <p>2019年人才和经验积累的向上健身开始快速布局全国</p>
+                            </div>
+                            <div class="service-info">
+                                <div class="brand-info">
+                                    <h5>品牌简介</h5>
+                                    <p>向上健身将会是全球最大的健身俱乐部向上健身将会是全球最大的健身俱乐部</p>
+                                </div>
+                                <div class="product-info">
+                                    <h5>产品系列</h5>
+                                    <ol>
+                                        <li>
+                                            <p>1.向上健身连锁:全国连锁专业健身会所，内有会员休息区、瑜伽教室、操房、有氧及无氧器械区、泳池、淋浴区等配套设施。</p>
+
+                                        </li>
+                                        <li>
+                                            <p>2.向上健身连锁：向上健身旗下品牌，全国连锁小型平价自助健身房。
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>3.向上健身连锁：向上健身旗下品牌，全国连锁专业私教健身。</p>
+                                        </li>
+                                        <li>
+                                            <p>4.向上健身APP：向上健身连锁机构旗下的一款服务于向上会员的应用软件。 </p>
+                                        </li>
+                                        <li>
+                                            <p>5.向上健身培训基地：由向上集团打造的健身培训基地。</p>
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div class="calture-info">
+                                    <h5>文化理念</h5>
+                                    <p>愿景：身边的健身专家</p>
+                                    <p>理念：德才兼备，以德为先</p>
+                                    <p>精神：务实、进取、永不放弃</p>
+                                    <p>使命：运动创造快乐，健康成就未来</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="video row clearfix">
+                    <div class="hidden col-md-2"></div>
+                    <div class="video-bg col-md-8">
+                        <video class="video" src="/video/video.mp4" poster="/images/poster/video.png" width="100%" autoplay preload controls></video>
+                    </div>
+                    <div class="hidden col-md-2"></div>
+                </div>
+            </main>
+        <% include ./common/contact.ejs %>
+        <% include ./common/scroll.ejs %>
+    </div>
+</body>
+
+</html>

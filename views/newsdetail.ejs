@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ./common/header.ejs %>
+        <link rel="stylesheet" href="/stylesheets/newsDetail.css">
+</head>
+
+<body>
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+        <% include ./common/nav2.ejs %>
+            <main role="main" class="inner cover">
+                <div id="newsDetail"></div>
+                <script type="text/html" id="newsDetail_temp">
+                <h3 class="news-title text-center mt50">
+                    {{ newsDetail.title}}
+                </h3>
+                <div class="mt50">
+                    <a href="javascript:;">责任编辑</a> ：
+                    <a href="/users/tospace/{{newsDetail.uid}}" class="newstip">{{newsDetail.name}}</a>
+                    <a href="javascript:;" class="ml20">发布时间</a> ：
+                    <a href="/users/tospace/{{newsDetail.uid}}" class="newstip">{{newsDetail.createTime | dateFormat "yyyy-MM-dd hh:mm:ss"}}</a>
+                </div>
+                <div class="news-content mt50">
+                    {{@ newsDetail.content}}
+                </div>
+                
+            </script>
+            </main>
+            <footer class="mastfoot mt-auto">
+                <div class="inner">
+                    <p>版权所有
+                        <a href="/" class="newstip">刘保光</a>, 向上健身俱乐部-毕业设计-刘保光
+                        <a href="/" class="newstip">向上健身俱乐部</a>.</p>
+                </div>
+            </footer>
+
+    </div>
+    <script>
+        var newsId = "<%= newsId %>";
+        function getNewsDetail(id) {
+            $.get("/news/getNewsDetail", { newsId: id }).done(data => {
+                console.log(data);
+                if (data.code != 200) {
+                    layer.msg(data.message);
+                    return;
+                }
+                $("#newsDetail").html(template("newsDetail_temp", { newsDetail: data.newsDetail }));
+            }).fail(err => {
+                throw err;
+            })
+        }
+        $(function () {
+            getNewsDetail(newsId);
+        })
+    </script>
+</body>
+
+</html>

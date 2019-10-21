@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/stylesheets/newsDetail.css">
+<header class="masthead mb-auto clearfix">
+    <div class="inner clearfix">
+        <h3 class="masthead-brand">新闻通知</h3>
+        <nav class="nav nav-masthead justify-content-center" id="userInfo">
+            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/news/tonews">新闻</a>
+            <a class="nav-link active" href="javascript:;">详情</a>
+            <a class="nav-link" href="/users/tologin">登陆</a>
+            <a class="nav-link" href="/users/toregister">注册</a>
+        </nav>
+    </div>
+</header>
+<script>
+    var user = $.cookie("user");
+    if (user) {
+        user = JSON.parse(user);
+        var userInfo = `
+            <a class="nav-link" href="/">首页</a>
+            <a class="nav-link" href="/news/tonews">新闻</a>
+            <a class="nav-link active" href="javascript:;">详情</a>
+            <a class="nav-link" href="/users/tospace/${user.id}">个人中心</a>
+            <a class="nav-link" href="javascript:;" onclick="logout()">退出</a>
+            `
+        $("#userInfo").html(userInfo);
+    }
+</script>

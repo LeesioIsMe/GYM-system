@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ./common/header.ejs %>
+</head>
+
+<body>
+    <div class="container">
+        <div class="session">
+            <div class="select-service">
+                <% if (userType != 0) { %>
+                    <label for="serviceId">选择客服：</label>
+                    <select id="serviceId">
+                        <% for (var i in users) { %>
+                            <option value="<%= users[i].id %>">
+                                <%= users[i].name %>
+                            </option>
+                            <% } %>
+                    </select>
+                    <% } %>
+                        <% if (userType == 0) { %>
+                            <label for="serviceId">选择对象：</label>
+                            <select id="serviceId">
+                                <% for (var i in users) { %>
+                                    <option value="<%= users[i].id %>">
+                                        <%= users[i].name %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <% } %>
+
+            </div>
+            <div class="lookMore fs12 text-center" style="cursor: pointer;">
+                <i class="fa fa-angle-double-up" aria-hidden="true"></i>查看更多记录</div>
+            <ul class="list-group" id="conversationList">
+
+            </ul>
+            <script type="text/html" id="conversationList_no_temp">
+                <li class="list-group-item mb10">
+                    <div class="user clearfix colgreen">
+                        <span class="user-name pull-left">
+                            <%= serviceName %>
+                        </span>
+                        <span class="user-time pull-right">
+                            <%= time %>
+                        </span>
+                    </div>
+                    <div class="content">
+                        <p class="content">
+                            <%= tips %>
+                        </p>
+                    </div>
+                </li>
+            </script>
+            <script type="text/html" id="conversationList_temp">
+                {{each conversation c}}
+                <li class="list-group-item mb10">
+                    {{if c.fromId == uid}}
+                    <div class="user clearfix colgreen">
+                        <span class="user-name pull-left">{{c.uname}}</span>
+                        <span class="user-time pull-right">{{c.createTime | dateFormat "yyyy-MM-dd hh:mm:ss"}}</span>
+                    </div>
+                    {{/if}}
+                    {{if c.fromId != uid}}
+                    <div class="user clearfix colblue">
+                        <span class="user-name pull-left">{{c.uname}}</span>
+                        <span class="user-time pull-right">{{c.createTime | dateFormat "yyyy-MM-dd hh:mm:ss"}}</span>
+                    </div>
+                    {{/if}}
+                    <div class="content">
+                        <p class="content">{{c.content}}</p>
+                    </div>
+                </li>
+                {{/each}}
+            </script>
+
+            <div class="input-text clearfix">
+                <p class="help-text"></p>
+                <div class="form-group">
+                    <textarea class="form-control" name="" id="inputText" rows="3"></textarea>
+                </div>
+                <p class="help-btn">
+                    <button type="button" id="btnSend" class="btn btn-success btn-sm pull-right">发送</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getConversation(isLookMore) {
+            var userId = JSON.parse($.cookie("user")).id;
+            var serviceId = $("#serviceId").val();
+            $.get("/getConversation", { userId, serviceId, isLookMore }).done(data => {
+                console.log(data);
+                if (data.code != 200) {
+                    layer.msg(data.message);
+                    return;
+                }
+                var conversation = data.conversation.reverse();
+                if (data.conversation.length == 0) {
+                    $("#conversationList").html(template("conversationList_no_temp", { conversation: conversation, uid: userId }));
+                }
+                if (data.conversation.length != 0) {
+                    $("#conversationList").html(template("conversationList_temp", { conversation: conversation, uid: userId }));
+                }
+            }).fail(err => {
+                throw err;
+            })
+        }
+        $(function () {
+            var user = JSON.parse($.cookie("user"));
+            var isLookMore = 0;
+            getConversation(isLookMore);
+            $(".lookMore").click(function () {
+                isLookMore = 1;
+                $(this).addClass("hide")
+                getConversation(isLookMore)
+            })
+            $("#serviceId").change(function () {
+                $(".lookMore").removeClass("hide")
+                getConversation(isLookMore);
+            })
+            $("#btnSend").click(function () {
+                var content = $("#inputText").val();
+                var serviceId = $("#serviceId").val();
+                var userId = JSON.parse($.cookie("user")).id;
+                var fromId = userId;
+                var toId = serviceId;
+                $.post("/postConversation", { userId, serviceId, content, fromId, toId }).done(data => {
+                    console.log(data);
+                    getConversation(isLookMore);
+                    $("#inputText").val("");
+                }).fail(err => {
+                    throw err;
+                })
+            })
+        })
+
+    </script>
+</body>
+
+</html>

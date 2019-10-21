@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ./common/header.ejs %>
+</head>
+
+<body>
+    <div class="box vip">
+        <% include ./common/nav.ejs %>
+        <div class="search">
+            <button class="btn btn-dark operateBtn" type="button" id="showSearchBtn" data-toggle="collapse"
+                data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">查询会员</button>
+            <button class="btn btn-dark operateBtn" type="button" id="addVip" data-toggle="modal" data-target="#add"
+                aria-expanded="false" aria-controls="collapseExample">添加会员</button>
+            <div class="collapse" id="collapseExample">
+                <label for="byName">
+                    <span>按姓名:</span>
+                    <input type="text" class="search-text form-control form-control-md" name="" id="keywordsName"
+                        aria-describedby="helpId" placeholder="按名字查询">
+                </label>
+                <label for="byAccount">
+                    <span>按账号：</span>
+                    <input type="text" class="search-text form-control form-control-md" name="" id="keywordsAccount"
+                        aria-describedby="helpId" placeholder="按账号查询">
+                </label>
+                <label for="byTeach">
+                    <span>按教练：</span>
+                    <input type="text" class="search-text form-control form-control-md" name="" id="keywordsTeach"
+                        aria-describedby="helpId" placeholder="按教练查询">
+                </label>
+                <button class="btn btn-dark" id="btnSearch">搜索</button>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">会员名称</th>
+                    <th scope="col">会员账号</th>
+                    <th scope="col">联系电话</th>
+                    <th scope="col">会员状态</th>
+                    <!-- 是否是超级会员 -->
+                    <th scope="col">他的教练</th>
+                    <th scope="col">注册时间</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody id="userList">
+                <% for(var i in users) { %>
+                <tr>
+                    <td>
+                        <label class="btn">
+                            <input class="selectSingle" type="checkbox" data-id="<%= users[i].id %>" autocomplete="off">
+                        </label>
+                    </td>
+                    <td>
+                        <%= users[i].name || "无" %>
+                    </td>
+                    <td>
+                        <%= users[i].account %>
+                    </td>
+                    <td>
+                        <%= users[i].phone || "无" %>
+                    </td>
+                    <td>
+                        <%= users[i].status == 0 ? "普通VIP" :(users[i].status == 1 ? "超级VIP" : "游客") %>
+                    </td>
+                    <td>
+                        <%= users[i].teach || "无" %>
+                    </td>
+                    <td>
+                        <%= users[i].createTime %>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail"
+                            data-id="<%= users[i].id %>">详情</button>
+                        <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#edit"
+                            data-id="<%= users[i].id %>">编辑</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete"
+                            data-id="<%= users[i].id %>">删除</button>
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+            <script type="text/html" id="userList_temp">
+                    {{each users u}}
+                    <tr>
+                        <td>
+                            <label class="btn">
+                                <input class="selectSingle" type="checkbox" data-id="<%= users[i].id %>" autocomplete="off">
+                            </label>
+                        </td>
+                        <td>
+                            {{ u.name || "无" }}
+                        </td>
+                        <td>
+                            {{ u.account }}
+                        </td>
+                        <td>
+                            {{ u.phone || "无" }}
+                        </td>
+                        <td>
+                            {{ u.status == 0 ? "普通VIP" : (u.status == 1 ? "超级VIP" : "游客") }}
+                        </td>
+                        <td>
+                            {{ u.teach || "无" }}
+                        </td>
+                        <td>
+                            {{ u.createTime | dateFormat "yyyy-MM-dd hh:mm:ss"}}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detail" data-id="{{ u.id }}">详情</button>
+                            <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#edit" data-id="{{ u.id }}">编辑</button>
+                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" data-id="{{ u.id }}">删除</button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </script>
+        </table>
+
+        <!-- 添加 -->
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form id="addForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">添加会员</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="name">会员名称：</label>
+                                <input type="text" class="form-control" name="name" id="name" aria-describedby="helpId"
+                                    placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="account">会员账号：</label>
+                                <input type="text" class="form-control" name="account" id="account"
+                                    aria-describedby="helpId" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">会员密码：</label>
+                                <input type="password" class="form-control" name="password" id="password"
+                                    aria-describedby="helpId" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">会员电话：</label>
+                                <input type="text" class="form-control" name="phone" id="phone"
+                                    aria-describedby="helpId" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">会员状态：</label>
+                                <!-- <input type="text" class="form-control" name="status" id="status" aria-describedby="helpId" placeholder=""> -->
+                                <select class="form-control" name="status" id="status">
+                                    <option value="2" selected>游客</option>
+                                    <option value="0">普通VIP</option>
+                                    <option value="1">超级VIP</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="teach">教练（没有教练可以不填）：</label>
+                                <select class="form-control" name="teach" id="teach"></select>
+                                <script type="text/html" id="teach_temp">
+                                        {{each teachs t}}
+                                            <option value="{{t.id}}">{{t.name}}</option>
+                                        {{/each}}
+                                    </script>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="btnAdd">添加</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- 编辑 -->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form id="editForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">编辑信息</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="editBody">
+                            <script type="text/html" id="editBody_temp">
+                                    <div class="form-group">
+                                        <label for="accountEdit">会员账号：</label>
+                                        <input type="text" class="form-control" disabled name="account" id="accountEdit" value="{{userInfo.account}}" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="form-group hide">
+                                        <label for="account">会员账号：</label>
+                                        <input type="text" class="form-control" name="account" id="account" value="{{userInfo.account}}" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">会员密码：</label>
+                                        <input type="password" class="form-control" name="password" id="password" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">会员名称：</label>
+                                        <input type="text" class="form-control" name="name" id="name" aria-describedby="helpId" placeholder="">
+                                    </div>
+    
+                                    <div class="form-group">
+                                        <label for="phone">会员电话：</label>
+                                        <input type="text" class="form-control" name="phone" id="phone" aria-describedby="helpId" placeholder="">
+                                    </div>
+                                    <label for="status">会员状态：</label>
+                                    <!-- <input type="text" class="form-control" name="status" id="status" aria-describedby="helpId" placeholder=""> -->
+                                    
+                                    <div class="form-group">
+                                        <select class="form-control" name="status" id="status">
+                                            <option value="2" selected>游客</option>
+                                            <option value="0">普通VIP</option>
+                                            <option value="1">超级VIP</option>
+                                        </select>
+                                    </div>
+                                    <label for="teach">教练（没有教练可以不填）：</label>
+                                    <select class="form-control" name="teach" id="teach">
+                                        <% for(var i in teachs) { %>
+                                            <option value="<%= teachs[i].id %>"><%= teachs[i].name %></option>
+                                        <% } %>
+                                    </select>
+                                </script>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="btnEdit">保存</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <!-- 详情 -->
+        <div class="modal fade mg50" id="detail" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">会员信息</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="detailBody">
+                        <script type="text/html" id="detailBody_temp">
+                                <div class="form-group clearfix">
+                                    <label for="name" class="col-md-4 text-right">会员名称：</label>
+                                    <span class="col-md-8 text-left">{{userInfo.name || "无"}}</span>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label for="account" class="col-md-4 text-right">会员账号：</label>
+                                    <span class="col-md-8 text-left">{{userInfo.account}}</span>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label for="phone" class="col-md-4 text-right">会员电话：</label>
+                                    <span class="col-md-8 text-left">{{userInfo.phone || "无"}}</span>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label for="status" class="col-md-4 text-right">会员状态：</label>
+                                    <span class="col-md-8 text-left">{{userInfo.status == 1?"超级会员":(userInfo.status == 2?"游客":"普通会员")}}</span>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label for="teach" class="col-md-4 text-right">教练：</label>
+                                    <span class="col-md-8 text-left">{{userInfo.teach || "无"}}</span>
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label for="createTime" class="col-md-4 text-right">注册时间：</label>
+                                    <span class="col-md-8 text-left">{{userInfo.createTime | dateFormat "yyyy-MM-dd hh:mm:ss"}}</span>
+                                </div>
+                            </script>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 删除 -->
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">删除警告</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        您确定要删除选中记录么？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-danger" id="btnDel">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 删除成功提示 -->
+        <div class="modal fade" id="tip" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">提示信息</h5>
+                    </div>
+                    <div class="modal-body">
+                        删除成功
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">
+                            <a href="/users/tovipmanage/<%= pageSize %>/1">确定</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="deleteGroup text-left ml20">
+            <button type="button" class="btn btn-primary" id="btnSelectAll">全选/全不选</button>
+            <button type="button" class="btn btn-danger ml20" data-toggle="modal" data-target="#delete"
+                id="btnDelAll">批量删除</button>
+        </div>
+        <nav aria-label="Page navigation example" class="pager" id="pager">
+            <ul class="pagination list-pagination">
+                <li class="page-item">
+                    <a class="page-link" id="prev" href="javascript:;">
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <% for (var i in pages) { %>
+                <li class="page-item">
+                    <a class="page-link pageIndex" data-page="<%= pages[i] %>"
+                        href="/users/tovipmanage/<%= pageSize %>/<%= pages[i] %>">
+                        <%= pages[i] %>
+                    </a>
+                </li>
+                <% } %>
+                <li class="page-item">
+                    <a class="page-link" id="next" href="javascript:;">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+            <script type="text/html" id="pager_temp">
+                    <ul class="pagination search-pagination">
+                        <li class="page-item">
+                            <a class="page-link" id="sprev" href="javascript:;">
+                                <i class="fa fa-angle-left" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        {{each pages p}}
+                        <li class="page-item">
+                            <a class="page-link pageIndex" data-page="{{p}}" href="javascript:;">
+                                {{p}}
+                            </a>
+                        </li>
+                        {{/each}}
+                        <li class="page-item">
+                            <a class="page-link" id="snext" href="javascript:;">
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </script>
+        </nav>
+        <% include ./common/contact.ejs %>
+    </div>
+    <script>
+        var idGroup = [];
+        var isSelectAll = false;
+        var pageSize = 5;
+        var pageNow = "<%= pageNow %>" - 0;
+        var pages = ("<%= pages %>").split(",");
+        function checkPageIsClick() {
+            if (pageNow == 1) {
+                $("#prev").addClass("layui-btn-disabled")
+            }
+            if (pageNow == pages.length) {
+                $("#next").addClass("layui-btn-disabled")
+            }
+            // console.log(pageNow)
+            $(".page-link").eq(pageNow).addClass("selected").siblings().removeClass("selected");
+        }
+        function deleteByIdGroup(arr) {
+            $.post("/users/deleteUser", { idGroup: arr.join(",") }).done(function (data) {
+                console.log(data);
+                if (data.code != 200) {
+                    layer.msg(data.message);
+                    return;
+                }
+            }).fail(err => {
+                throw err;
+            })
+        }
+        function deleteById(id) {
+            $.post("/users/deleteUser", { id: id }).done(function (data) {
+                console.log(data);
+                if (data.code != 200) {
+                    layer.msg(data.message);
+                    return;
+                }
+            }).fail(err => {
+                throw err;
+            })
+        }
+        function search(keywordsName, keywordsAccount, keywordsTeach, pageSize, pageNow) {
+            $.post("/users/search", {
+                keywordsName,
+                keywordsAccount,
+                keywordsTeach,
+                pageSize,
+                pageNow
+            }).done(data => {
+                // console.log(data);
+                if (data.code != 200) {
+                    layer.msg(data.message);
+                    return;
+                }
+                if (data.message == "没有数据") {
+                    $("#userList").html("<tr style='width:100%;height:100px;line-height:100px;text-align:center;'><td>没有符合条件的数据<^_^></td><td>无</td><td>无</td><td>无</td><td>无</td><td>无</td></tr>");
+                    $("#pager").html("");
+                    return;
+                }
+                layer.msg(data.message);
+                pages = data.pages;
+
+                $("#userList").html(template("userList_temp", { users: data.users }));
+                $("#pager").html(template("pager_temp", { pages: data.pages }))
+                $(".page-link").each(function (i, v) {
+                    if (pageNow == 1) {
+                        $("#sprev").addClass("layui-btn-disabled")
+                    }
+                    if (pageNow == pages.length) {
+                        $("#snext").addClass("layui-btn-disabled")
+                    }
+                    if (i == pageNow) {
+                        $(this).addClass("selected").siblings().removeClass("selected");
+                    }
+                    // 分页时候再次添加点击事件
+                    if (i == 0) {
+                        if (pageNow != 1) {
+                            $(v).click(function () {
+                                pageNow--;
+                                search(keywordsName, keywordsAccount, keywordsTeach, pageSize, pageNow);
+                            })
+                        }
+                    } else if (i == $(".page-link").length - 1) {
+                        if (pageNow != $(".page-link").length - 2) {
+                            $(v).click(function () {
+                                pageNow++;
+                                search(keywordsName, keywordsAccount, keywordsTeach, pageSize, pageNow);
+                            })
+                        }
+                    } else {
+                        $(v).click(function () {
+                            pageNow = $(v).data("page") - 0;
+                            search(keywordsName, keywordsAccount, keywordsTeach, pageSize, pageNow);
+                        })
+                    }
+
+                })
+            })
+        }
+        $(function () {
+            var keywordsName = $("#keywordsName").val();
+            var keywordsAccount = $("#keywordsAccount").val();
+            var keywordsTeach = $("#keywordsTeach").val();
+            checkPageIsClick();
+            $("#btnSelectAll").click(function () {
+                if (!isSelectAll) {
+                    idGroup = [];
+                    $(".selectSingle").each(function (i, v) {
+                        $(v).prop("checked", true);
+                        idGroup.push($(v).data("id"));
+                    })
+                    isSelectAll = true;
+                } else {
+                    $(".selectSingle").each(function (i, v) {
+                        $(v).prop("checked", false);
+                    })
+                    idGroup = [];
+                    isSelectAll = false;
+                }
+                // console.log(idGroup);
+            })
+            $('.selectSingle').each(function (i, v) {
+                $(v).click(function () {
+                    var id = $(v).data("id");
+                    if ($(this).prop("checked")) {
+                        idGroup.push(id);
+                    } else {
+                        var index = idGroup.indexOf(id);
+                        idGroup.splice(index, 1);
+                    }
+                    // console.log(idGroup)
+                })
+            })
+
+            $("#detail").on("show.bs.modal", function (e) {
+                $.post("/users/getUser", { id: $(e.relatedTarget).data("id") }).done(function (data) {
+                    // console.log(data);
+                    if (data.code != 200) {
+                        layer.msg(data.message);
+                        return;
+                    }
+                    $("#detailBody").html(template("detailBody_temp", { userInfo: data.info }))
+                }).fail(err => {
+                    throw err;
+                })
+            })
+            $("#delete").on("show.bs.modal", function (e) {
+                var id = $(e.relatedTarget).data("id");
+                $("#btnDel").click(function () {
+                    id ? deleteById(id) : deleteByIdGroup(idGroup);
+                    $("#tip").modal("show");
+                    $("#delete").modal("hide")
+                })
+            })
+            $("#btnAdd").click(function (e) {
+                e.preventDefault();
+                $.post("/users/addUser", $("#addForm").serialize()).done(function (data) {
+                    console.log(data)
+                    if (data.code != 200) {
+                        layer.msg(data.message);
+                        return;
+                    }
+
+                    location.href = "/users/tovipmanage/<%= pageSize %>/1";
+
+
+                }).fail(function (err) {
+                    throw err;
+                })
+            })
+
+            $("#edit").on("show.bs.modal", function (e) {
+                var id = $(e.relatedTarget).data("id");
+                $.post("/users/getUser", { id }).done(function (data) {
+                    console.log(data);
+                    if (data.code != 200) {
+                        layer.msg(data.message);
+                        return;
+                    }
+                    $("#editBody").html(template("editBody_temp", { userInfo: data.info }))
+                    $("#btnEdit").click(function (e) {
+                        e.preventDefault();
+                        console.log($("#editForm").serialize())
+                        $.post("/users/editUser", $("#editForm").serialize()).done(data => {
+                            console.log(data);
+                            if (data.code != 200) {
+                                layer.msg(data.message);
+                                return;
+                            }
+                            layer.msg("编辑成功");
+                            location.reload();
+                        }).fail(err => {
+                            throw err;
+                        })
+                    })
+                }).fail(err => {
+                    throw err;
+                })
+            })
+            $("#add").on("show.bs.modal", function (e) {
+                $.get("/team/getTeachs").done(function (data) {
+                    // console.log(data);
+                    if (data.code != 200) {
+                        layer.msg(data.message);
+                        return;
+                    }
+                    $("#teach").html(template("teach_temp", { teachs: data.teachs }))
+                }).fail(err => {
+                    throw err;
+                })
+            })
+
+            $("#btnSearch").click(function () {
+                keywordsName = $("#keywordsName").val();
+                keywordsAccount = $("#keywordsAccount").val();
+                keywordsTeach = $("#keywordsTeach").val();
+                pageNow = 1;
+                search(keywordsName, keywordsAccount, keywordsTeach, pageSize, pageNow);
+            })
+            $("#prev").click(function () {
+                if (pageNow != 1) {
+                    pageNow--;
+                    location.href = `/users/tovipmanage/${pageSize}/${pageNow}`
+                }
+            })
+            $("#next").click(function () {
+                console.log(pages.length)
+                console.log(pageNow)
+                if (pageNow != pages.length) {
+                    pageNow++;
+                    location.href = `/users/tovipmanage/${pageSize}/${pageNow}`
+                }
+            })
+        })
+
+
+    </script>
+</body>
+
+</html>

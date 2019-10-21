@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ./common/header.ejs %>
+</head>
+
+<body>
+    <div class="box">
+        <% include ./common/nav.ejs %>
+        <main>
+            <div class="slider">
+                <div id="carouselExampleIndicators" class="carousel slide newsSlider" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="sliderimg" src="/images/tcbanner.jpg" alt="" width="100%">
+                            <div class="carousel-caption d-none d-md-block text-right col-md-4 course-intro"
+                                style="left:unset;right:50px;">
+                                <h2>课程介绍</h2>
+                                <p>向上拥有国际一流的专业团操和瑜伽师资团队，30名高级别国际资格认证的中外签约瑜伽导师。每周近200节精品瑜伽课，课程种类包括： 流瑜伽、阴瑜伽、热瑜伽、</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="course">
+                <div class="course-title">
+                    <h2>团操课程</h2>
+                    <p>向上拥有国际一流的专业团操师资团队</p>
+                </div>
+                <div class="layui-tab" style="color:#fff;">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this layui-col-md3" data-id="1">爱动精品收费课程</li>
+                        <li class="layui-col-md3" data-id="3">爱动精品收费课程2</li>
+                        <li class="layui-col-md3" data-id="5">爱动精品收费课程3</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item second-tab layui-show">
+                            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                                <ul class="layui-tab-title layui-col-md3">
+                                    <li class="layui-this" data-id="1">课程1</li>
+                                    <li data-id="2">课程2</li>
+                                </ul>
+                                <div class="layui-tab-content clearfix">
+                                    <div class="layui-tab-item layui-show">
+                                        <div class="content layui-col-md6">
+                                            <h5 class="mb20 clearfix d-flex align-items-center justify-content-between">
+                                                <p class="col-md-6">课程信息:</p>
+                                                <p class="col-md-6 text-right">
+                                                    <button class="btn btn-sm btn-info">参加该课程人数：<i id="count1">10</i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary"
+                                                        onclick="btnJoin(1)">参加该课程</button>
+                                                </p>
+                                            </h5>
+                                            <div class="detail">
+                                                我们仍然秉承了矩阵式，功能性训练计划体系！我们的训练计划仍然是保持了每一周都会更新，每周都会不同！每三个月会有周期性的调整。当然很重要的一点我们不会提前让你知道训练内容！你只有来到课堂上才会知道当天的训练计划！她就像你的生活一样，你永远无法预知将来会发生什么，但我们可以通过周期性的训练来应对任何未知的挑战！
+                                            </div>
+                                        </div>
+                                        <div class="img layui-col-md3">
+                                            <img src="/images/course/course1.jpg" alt="" width="250px" height="250px"
+                                                style="margin-left:20px">
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <div class="content layui-col-md6">
+                                            <h5 class="mb20 clearfix d-flex align-items-center justify-content-between">
+                                                <p class="col-md-6">课程信息:</p>
+                                                <p class="col-md-6 text-right">
+                                                    <button class="btn btn-sm btn-info">参加该课程人数：<i id="count2">10</i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary"
+                                                        onclick="btnJoin(2)">参加该课程</button>
+                                                </p>
+                                            </h5>
+                                            <div class="detail">
+                                                我们仍然秉承了矩阵式，功能性训练计划体系！我们的训练计划仍然是保持了每一周都会更新，每周都会不同！每三个月会有周期性的调整。当然很重要的一点我们不会提前让你知道训练内容！你只有来到课堂上才会知道当天的训练计划！她就像你的生活一样，你永远无法预知将来会发生什么，但我们可以通过周期性的训练来应对任何未知的挑战！
+                                            </div>
+                                        </div>
+                                        <div class="img layui-col-md3">
+                                            <img src="/images/course/course2.jpg" alt="" width="250px" height="250px"
+                                                style="margin-left:20px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item second-tab">
+                            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                                <ul class="layui-tab-title layui-col-md3">
+                                    <li class="layui-this" data-id="3">课程3</li>
+                                    <li data-id="4">课程4</li>
+                                </ul>
+                                <div class="layui-tab-content clearfix">
+                                    <div class="layui-tab-item layui-show">
+                                        <div class="content layui-col-md6">
+                                            <h5 class="mb20 clearfix d-flex align-items-center justify-content-between">
+                                                <p class="col-md-6">课程信息:</p>
+                                                <p class="col-md-6 text-right">
+                                                    <button class="btn btn-sm btn-info">参加该课程人数：<i id="count3">10</i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary"
+                                                    onclick="btnJoin(3)">参加该课程</button>
+                                                </p>
+                                            </h5>
+                                            <div class="detail">
+                                                我们仍然秉承了矩阵式，功能性训练计划体系！我们的训练计划仍然是保持了每一周都会更新，每周都会不同！每三个月会有周期性的调整。当然很重要的一点我们不会提前让你知道训练内容！你只有来到课堂上才会知道当天的训练计划！她就像你的生活一样，你永远无法预知将来会发生什么，但我们可以通过周期性的训练来应对任何未知的挑战！
+                                            </div>
+                                        </div>
+                                        <div class="img layui-col-md3">
+                                            <img src="/images/course/course1.jpg" alt="" width="250px" height="250px"
+                                                style="margin-left:20px">
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <div class="content layui-col-md6">
+                                            <h5 class="mb20 clearfix d-flex align-items-center justify-content-between">
+                                                <p class="col-md-6">课程信息:</p>
+                                                <p class="col-md-6 text-right">
+                                                    <button class="btn btn-sm btn-info">参加该课程人数：<i id="count4">10</i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary"
+                                                    onclick="btnJoin(4)">参加该课程</button>
+                                                </p>
+                                            </h5>
+                                            <div class="detail">
+                                                我们仍然秉承了矩阵式，功能性训练计划体系！我们的训练计划仍然是保持了每一周都会更新，每周都会不同！每三个月会有周期性的调整。当然很重要的一点我们不会提前让你知道训练内容！你只有来到课堂上才会知道当天的训练计划！她就像你的生活一样，你永远无法预知将来会发生什么，但我们可以通过周期性的训练来应对任何未知的挑战！
+                                            </div>
+                                        </div>
+                                        <div class="img layui-col-md3">
+                                            <img src="/images/course/course2.jpg" alt="" width="250px" height="250px"
+                                                style="margin-left:20px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item second-tab">
+                            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                                <ul class="layui-tab-title layui-col-md3">
+                                    <li class="layui-this" data-id="5">课程5</li>
+                                    <li data-id="6">课程6</li>
+                                </ul>
+                                <div class="layui-tab-content clearfix">
+                                    <div class="layui-tab-item layui-show">
+                                        <div class="content layui-col-md6">
+                                            <h5 class="mb20 clearfix d-flex align-items-center justify-content-between">
+                                                <p class="col-md-6">课程信息:</p>
+                                                <p class="col-md-6 text-right">
+                                                    <button class="btn btn-sm btn-info">参加该课程人数：<i id="count5">10</i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary"
+                                                    onclick="btnJoin(5)">参加该课程</button>
+                                                </p>
+                                            </h5>
+                                            <div class="detail">
+                                                我们仍然秉承了矩阵式，功能性训练计划体系！我们的训练计划仍然是保持了每一周都会更新，每周都会不同！每三个月会有周期性的调整。当然很重要的一点我们不会提前让你知道训练内容！你只有来到课堂上才会知道当天的训练计划！她就像你的生活一样，你永远无法预知将来会发生什么，但我们可以通过周期性的训练来应对任何未知的挑战！
+                                            </div>
+                                        </div>
+                                        <div class="img layui-col-md3">
+                                            <img src="/images/course/course1.jpg" alt="" width="250px" height="250px"
+                                                style="margin-left:20px">
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <div class="content layui-col-md6">
+                                            <h5 class="mb20 clearfix d-flex align-items-center justify-content-between">
+                                                <p class="col-md-6">课程信息:</p>
+                                                <p class="col-md-6 text-right">
+                                                    <button class="btn btn-sm btn-info">参加该课程人数：<i id="count6">10</i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary"
+                                                    onclick="btnJoin(6)">参加该课程</button>
+                                                </p>
+                                            </h5>
+                                            <div class="detail">
+                                                我们仍然秉承了矩阵式，功能性训练计划体系！我们的训练计划仍然是保持了每一周都会更新，每周都会不同！每三个月会有周期性的调整。当然很重要的一点我们不会提前让你知道训练内容！你只有来到课堂上才会知道当天的训练计划！她就像你的生活一样，你永远无法预知将来会发生什么，但我们可以通过周期性的训练来应对任何未知的挑战！
+                                            </div>
+                                        </div>
+                                        <div class="img layui-col-md3">
+                                            <img src="/images/course/course2.jpg" alt="" width="250px" height="250px"
+                                                style="margin-left:20px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <% include ./common/contact.ejs %>
+        <% include ./common/scroll.ejs %>
+    </div>
+    <script>
+        pageSize = 10;
+        pageNow = 1;
+        var courseId = 1;
+        function getCount(courseId){
+            $.get("/courses/getCount",{
+                id:courseId
+            }).done(data=>{
+                if(data.code  != 200){
+                    $("#count"+courseId).text(0);
+                    return;
+                }
+                $("#count"+courseId).text(data.count);
+            })
+        }
+        getCount(courseId)
+        function btnJoin(courseId){
+            console.log(courseId);
+            if(!user || !user.id){
+                location.href="/users/tologin"
+                return;
+            }
+            layer.open({
+                type:2,
+                title:"参加课程信息选择",
+                area:["70%","70%"],
+                content:`/courses/tojoin?courseId=${courseId}&userId=${user.id}`
+            })
+            // $.post("/courses/joinCourse",{
+            //     courseId,
+            //     userId:user.id
+            // }).done(data=>{
+            //     console.log(data);
+            // }).fail(err=>{
+            //     throw err;
+            // })
+        }
+        $('.carousel').carousel({
+            interval: 2000
+        })
+        $(".pager-news li").each(function (i, v) {
+            $(v).click(function () {
+                if (i != 0 && i != $(".pager-news li").length - 1) {
+                    pageNow = Number.parseInt($(v).data("index"));
+                } else if (i == 0) {
+                    pageNow == 1 ? pageNow = 1 : pageNow--;
+                } else if (i == $(".pager-news li").length - 1) {
+                    pageNow == $(".pager-news li").length - 2 ? pageNow = $(".pager-news li").length - 2 : pageNow++;
+                }
+                $(".pager-news li").eq(pageNow).addClass("active").siblings().removeClass("active");
+            })
+        })
+        $("li").each(function(i,v){
+            $(v).click(function(){
+                if($(v).data("id")){
+                    courseId = $(v).data("id");
+                    getCount(courseId);
+                    console.log("aaa")
+                }
+                console.log(courseId)
+            })
+        })
+    </script>
+</body>
+
+</html>

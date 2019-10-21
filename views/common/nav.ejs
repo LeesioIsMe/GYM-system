@@ -1,0 +1,110 @@
+<header class="header-bg">
+    <!-- RD Navbar Transparent-->
+    <nav class="header">
+        <div class="header-router">
+            <div class="header-logo">
+                <a href="/">
+                    <img width='80' height='80' src='/images/logo.jpg' alt=''>
+                </a>
+            </div>
+            <!-- RD Navbar Nav-->
+            <ul class="header-nav">
+                <li class="on" data-nav="index">
+                    <a href="/">
+                        <span>首页</span>
+                    </a>
+                </li>
+                <li data-nav="about">
+                    <a href="/about/toabout">
+                        <span>关于我们</span>
+                    </a>
+                </li>
+                <li data-nav="news" class="nav-news">
+                    <a href="/news/tonews">
+                        <span>新闻中心</span><i id="newsIcon" class="fa fa-angle-down pull-right" aria-hidden="true"
+                            style="display:inline-block;line-height: 118px;"></i>
+                    </a>
+                    <ul class="nav-news-down-list">
+                        <li><a href="/news/tonews">新闻活动</a></li>
+                        <li><a href="/news/topost">新闻发布</a></li>
+                    </ul>
+                </li>
+                <li data-nav="team">
+                    <a href="/team/toteam">
+                        <span>师资团队</span>
+                    </a>
+                </li>
+                <li data-nav="courses">
+                    <a href="/courses/tocourse">
+                        <span>课程介绍</span>
+                    </a>
+                </li>
+                <li data-nav="vipmanage">
+                    <a href="/users/tovipmanage/5/1">
+                        <span>会员管理</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="user-info" id="userInfo">
+                <ul>
+                    <li>
+                        <a href="/users/tologin">
+                            <span>登录</span>
+                        </a>
+                        <a href="/users/toregister">
+                            <span>注册</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--RD Navbar Search-->
+        <!-- <div class="header-search">
+            <form class="form-search rd-search">
+                <div class="form-group">
+                    <label for="keywords" class="form-label form-search-label form-label-sm">Search</label>
+                    <input id="keywords" type="text" name="s" autocomplete="off" class="form-search-input input-sm form-control form-control-gray-lightest input-sm"
+                    />
+                </div>
+                <button type="submit" class="form-search-submit" id="searchBtn">
+                    <span class="mdi mdi-magnify"></span>
+                </button>
+            </form>
+        </div> -->
+    </nav>
+</header>
+<script>
+    var nav = "<%= nav %>";
+    $(".header-nav li").each(function (i, v) {
+        if ($(v).data("nav") == nav) {
+            $(v).addClass("on").siblings().removeClass("on");
+            return;
+        }
+    })
+    var user = $.cookie("user");
+    if (user) {
+        user = JSON.parse(user);
+        var userInfo = `
+        <ul>
+            <li>
+                <a href="/users/tospace/${user.id || ''}">
+                    <span>${user.name || user.account}</span>
+                </a>
+                <a href="javascript:;" onclick="logout()">
+                    <span>退出</span>
+                </a>
+            </li>
+        </ul>
+        `
+        $("#userInfo").html(userInfo);
+    }
+    $(".nav-news").mouseover(function () {
+        $(".nav-news-down-list").slideDown();
+        $("#newsIcon").addClass("fa-angle-up").removeClass("fa-angle-down")
+    }).mouseleave(function () {
+        $(".nav-news-down-list").slideUp();
+        $("#newsIcon").addClass("fa-angle-down").removeClass("fa-angle-up")
+    })
+
+
+</script>
